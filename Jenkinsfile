@@ -31,6 +31,11 @@ pipeline {
         }
         
 	stage('SSH transfer') {
+         agent {
+                docker {
+                    image 'python:2-alpine'
+                }
+           }
 	 steps {
 	  sshPublisher(
 	   continueOnError: false, failOnError: true,
