@@ -10,16 +10,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                 sh 'ls'
+                 sh ''
             }
         }
         stage('Test') {
             steps {
-              sh 'ls'
+              sh ''
             }
             post {
                 always {
-                    junit 'test-reports/results.xml'
+                    junit ''
                 }
             }
         }
