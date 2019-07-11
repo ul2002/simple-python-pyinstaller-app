@@ -30,19 +30,24 @@ pipeline {
             }
         }
         stage('Deliver') { 
-            agent {
-                docker {
-                    image 'cdrx/pyinstaller-linux:python2' 
+          sshPublisher {
+            server('myhostname1.com') {
+                credentials('remoteuser') {
+                key: '''-----BEGIN RSA PRIVATE KEY-----
+                MIIEowIBAAKCAQEAznShdsv0Z6pT9nSeyHdQqSP427/72dkrmxG7BPr9pDvBBOnb
+                Y2agvw5/iuH+FsIjEoisBXh+DLN/H+7G9FuQO49Z5u16JRy3b8BOPF5qiGKagxw3
+                YlPLFslT6vAOQ36H77+u4Scn4JTSKVext93PimXu3wY5amfgZy0ygAEtP/JbOJz3
+                Fzl14wMoIGlxwYUDo6mq6Wk2l/xxQmH94y1MczosTjzjgC0r720o
+                -----END RSA PRIVATE KEY-----'''
+                }
+                label('myhostname')
+                transferSet {
+                sourceFiles("**/*.zip")
+                remoteDirectory('builds/\'yyyy/MM/dd/\'build-${BUILD_NUMBER}')
+                execCommand('mkdir deployfolder & unzip myproject-${version}.zip')
                 }
             }
-            steps {
-                sh 'pyinstaller --onefile sources/add2vals.py' 
-            }
-            post {
-                success {
-                    archiveArtifacts 'dist/add2vals' 
-                }
-            }
-        }
+          }
+       }
     }
 }
