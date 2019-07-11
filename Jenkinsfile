@@ -31,7 +31,7 @@ pipeline {
         }
         
 	stage('SSH transfer') {
-	 script {
+	 steps {
 	  sshPublisher(
 	   continueOnError: false, failOnError: true,
 	   publishers: [
