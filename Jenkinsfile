@@ -17,11 +17,6 @@ pipeline {
             steps {
               sh ''
             }
-            post {
-                always {
-                    
-                }
-            }
         }
         
 	stage('SSH transfer') {
