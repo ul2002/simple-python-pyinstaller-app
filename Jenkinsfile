@@ -45,7 +45,7 @@ pipeline {
 	     verbose: true,
 	     transfers: [
 	      sshTransfer(
-	       sourceFiles: "*",
+	       sourceFiles: "",
 	       removePrefix: "",
 	       remoteDirectory: "tmp",
 	       execCommand: "ls"
