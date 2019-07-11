@@ -29,28 +29,25 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') { 
-          steps {
-                sshPublisher {
-		    server('myhostname1.com') {
-		        credentials('remoteuser') {
-		        key: '''-----BEGIN RSA PRIVATE KEY-----
-		        MIIEowIBAAKCAQEAznShdsv0Z6pT9nSeyHdQqSP427/72dkrmxG7BPr9pDvBBOnb
-		        Y2agvw5/iuH+FsIjEoisBXh+DLN/H+7G9FuQO49Z5u16JRy3b8BOPF5qiGKagxw3
-		        YlPLFslT6vAOQ36H77+u4Scn4JTSKVext93PimXu3wY5amfgZy0ygAEtP/JbOJz3
-		        Fzl14wMoIGlxwYUDo6mq6Wk2l/xxQmH94y1MczosTjzjgC0r720o
-		        -----END RSA PRIVATE KEY-----'''
-		        }
-		        label('myhostname')
-		        transferSet {
-		        sourceFiles("**/*.zip")
-		        remoteDirectory('builds/\'yyyy/MM/dd/\'build-${BUILD_NUMBER}')
-		        execCommand('mkdir deployfolder & unzip myproject-${version}.zip')
-		        }
-		    }
-		  }
-            }
-          
-       }
+        
+	stage('SSH transfer') {
+	 script {
+	  sshPublisher(
+	   continueOnError: false, failOnError: true,
+	   publishers: [
+	    sshPublisherDesc(
+	     configName: "${env.SSH_CONFIG_NAME}",
+	     verbose: true,
+	     transfers: [
+	      sshTransfer(
+	       sourceFiles: "${path_to_file}/${file_name}, ${path_to_file}/${file_name}",
+	       removePrefix: "${path_to_file}",
+	       remoteDirectory: "${remote_dir_path}",
+	       execCommand: "run commands after copy?"
+	      )
+	     ])
+	   ])
+	 }
+	}
     }
 }
